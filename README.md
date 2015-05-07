@@ -1,5 +1,6 @@
 # tinymeasurement
-Tiny JavaScript client for the Google Measurement Protocol. Originally written for [eaio](http://eaio.com)'s widget.
+Tiny JavaScript client for the [Google Measurement Protocol](https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters). Originally written for [eaio](http://eaio.com)'s widget.
+Useful if you want to ping back some data from your widget into your Google Analytics account, without relying on ga.js or analytics.js being present.
 
 ## Features
 
@@ -20,7 +21,7 @@ Tiny JavaScript client for the Google Measurement Protocol. Originally written f
 - You may want to change the host name
 
 ```JavaScript
-})(window, 'eaio', 'UA-XXXXXXX-XX', location.host) <-- here!
+})(window, 'eaio', 'UA-XXXXXXX-XX', location.host) <-- edit these!
 ```
 
 ## Examples
@@ -59,7 +60,7 @@ Some stack trace mangling is done in order to transport as much information as p
 try {
  eaio.track.timing('performance', 'time to footer', 1 * new Date() - window.performance.timing.domInteractive)
 }
-catch (e) { /* Browser doesn't support the HTML 5 timing APIs which is cool */ }
+catch (e) { /* Browser doesn't support the HTML 5 timing APIs which may happen */ }
 </script>
 ```
 
@@ -76,8 +77,15 @@ Timing information for the 3rd party widget includes:
 
 * DNS lookup
 * TCP handshake
-* SSL handshake (excluded from the TCP handshake time, which is different from Souder's code that I stole)
+* SSL handshake (minus the TCP handshake time, which is different from Souder's code that I stole)
 * TTFB (time to first byte)
 
 (This only works if the script sends a `Timing-Accept-Origin` header. Many CDNs do.)
 
+### Passing custom parameters
+
+```JavaScript
+eaio.trackResourcePerformance(/3rd-party-server/, 'Yet another 3rd party script', null, { 'dh': '3rd-party-server.com' })
+```
+
+Tracks the resource performance under the `3rd-party-server.com` hostname. Useful if you set up different profiles for various components.
