@@ -80,7 +80,7 @@ Timing information for the 3rd party widget includes:
 * SSL handshake (minus the TCP handshake time, which is different from Souder's code that I stole)
 * TTFB (time to first byte)
 
-(This only works if the script sends a `Timing-Accept-Origin` header. Many CDNs do.)
+(This only works if the script sends a `Timing-Allow-Origin` header. Many CDNs do.)
 
 ### Passing custom parameters
 
