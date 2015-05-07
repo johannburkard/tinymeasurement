@@ -1,5 +1,5 @@
 # tinymeasurement
-Tiny JavaScript client for the Google Measurement Protocol. Originally written for http://eaio.com's widget.
+Tiny JavaScript client for the Google Measurement Protocol. Originally written for [eaio](http://eaio.com)'s widget.
 
 * Respects DoNotTrack.
 * Less than 1 KB post gzip.
