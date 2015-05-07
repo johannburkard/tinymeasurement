@@ -2,6 +2,20 @@
 
     var eaio = window[name] = window[name] || {}
 
+    function extend() {
+        var target = arguments[0], args = [].slice.call(arguments, 1), i, j
+        for (i = 0; i < args.length; ++i) {
+            if (args[i]) {
+                for (j in args[i]) {
+                    if (args[i].hasOwnProperty(j) && args[i][j] != undefined && args[i][j] !== '') {
+                        target[j] = args[i][j]
+                    }
+                }
+            }
+        }
+        return target
+    }
+
     function serialize(obj) {
         var str = []
         for (var p in obj) {
@@ -16,9 +30,9 @@
         return (x || '').length > maxlength ? x.substr(0, maxlength - 3) + '...' : x
     }
 
-    function request(params, extra) {
+    eaio.track = function(params, extra) {
         if (/y|1/.test(navigator['doNotTrack'] || navigator['msDoNotTrack'] || window['doNotTrack'])) return
-        var url = 'https://www.google-analytics.com/collect?' + serialize(eaio.extend({}, eaio.track.defaultParams, params, extra))
+        var url = 'https://www.google-analytics.com/collect?' + serialize(extend({}, eaio.track.defaultParams, params, extra))
         try {
             navigator.sendBeacon(url)
         }
@@ -26,28 +40,25 @@
             new Image().src = url
         }
     }
-
-    eaio.track = {
-            'defaultParams': { 'v': 1, 'tid': tid, 'dh': dh, 'cid': 1 * new Date, 'aip': 1, 'ul': navigator['userLanguage'] || navigator['language'] || '' },
-            'timingSamplingRate': .2,
-            'pageview': function(url, title, params) {
-                request({ 't': 'pageview', 'dl': abbreviate(url, 2048), 'dt': abbreviate(title, 1500) }, params)
-            },
-            'event': function(category, action, label, value, noInteraction, params) {
-                request({ 't': 'event', 'ec': abbreviate(category, 150), 'ea': abbreviate(action, 500), 'el': abbreviate(label, 500), 'ev': value }, params)
-            },
-            'timing': function(category, variable, time, label, params) {
-                // See https://developers.google.com/analytics/devguides/collection/gajs/gaTrackingTiming
-                if (time < 1000 * 60 * 60 && Math.random() < eaio.track['timingSamplingRate']) {
-                    request({ 't': 'timing', 'utc': abbreviate(category, 150), 'utv': abbreviate(variable, 500), 'utt': time, 'utl': abbreviate(label, 500) }, params)
-                }
-            },
-            'exception': function(category, thrown, label, params) {
-            	try {
-            	    eaio.track.event(category, thrown.stack ? thrown.stack.replace(/[\r\n]\s+\w+ /g, ' > ').replace(/https?:\/\/[^/]+/g, '...') : thrown, label, null, null, params) 
-            	}
-            	catch (e) {}
-            }
+    eaio.track['defaultParams'] = { 'v': 1, 'tid': 'UA-7427410-85', 'dh': 'cdn.eaio.net', 'cid': 1 * new Date, 'aip': 1, 'ul': navigator['userLanguage'] || navigator['language'] || '' }
+    eaio.track['timingSamplingRate'] = .2
+    eaio.track['pageview'] = function(url, title, params) {
+        eaio.track({ 't': 'pageview', 'dl': abbreviate(url, 2048), 'dt': abbreviate(title, 1500) }, params)
+    }
+    eaio.track['event'] = function(category, action, label, value, noInteraction, params) {
+        eaio.track({ 't': 'event', 'ec': abbreviate(category, 150), 'ea': abbreviate(action, 500), 'el': abbreviate(label, 500), 'ev': value }, params)
+    }
+    eaio.track['timing'] = function(category, variable, time, label, params) {
+        // See https://developers.google.com/analytics/devguides/collection/gajs/gaTrackingTiming
+        if (time < 1000 * 60 * 60 && Math.random() < eaio.track['timingSamplingRate']) {
+            eaio.track({ 't': 'timing', 'utc': abbreviate(category, 150), 'utv': abbreviate(variable, 500), 'utt': time, 'utl': abbreviate(label, 500) }, params)
+        }
+    }
+    eaio.track['exception'] = function(category, thrown, label, params) {
+        try {
+            eaio.track.event(category, thrown.stack ? thrown.stack.replace(/[\r\n]\s+\w+ /g, ' > ').replace(/https?:\/\/[^/]+/g, '...') : thrown, label, null, null, params) 
+        }
+        catch (e) {}
     }
 
     /**
@@ -59,9 +70,9 @@
      */
     eaio['trackResourcePerformance'] = function(pattern, name, label, params) {
         try {
-            var resourceEntries = window.performance.getEntriesByType('resource')
-            for (var i = 0; i < resourceEntries.length; ++i) {
-                var r0 = resourceEntries[i], timing = eaio.track.timing
+            var resourceEntries = window.performance.getEntriesByType('resource'), i, r0, timing = eaio.track.timing
+            for (i = 0; i < resourceEntries.length; ++i) {
+                r0 = resourceEntries[i]
                 if (pattern.test(r0.name)) {
                     if (r0.requestStart) {
                         timing(name, 'DNS', (r0.domainLookupEnd - r0.domainLookupStart)+.5|0, label, params)
