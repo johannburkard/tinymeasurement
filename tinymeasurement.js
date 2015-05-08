@@ -31,7 +31,7 @@
     }
 
     eaio.track = function(params, extra) {
-        if (/y|1/.test(navigator['doNotTrack'] || navigator['msDoNotTrack'] || window['doNotTrack'])) return
+        if (1 == (navigator['doNotTrack'] || navigator['msDoNotTrack'] || window['doNotTrack'])) return
         var url = 'https://www.google-analytics.com/collect?' + serialize(extend({}, eaio.track.defaultParams, params, extra))
         try {
             navigator.sendBeacon(url)
