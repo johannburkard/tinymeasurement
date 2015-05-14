@@ -40,7 +40,7 @@
             new Image().src = url
         }
     }
-    eaio.track['defaultParams'] = { 'v': 1, 'tid': tid, 'dh': dh, 'cid': 1 * new Date, 'aip': 1, 'ul': navigator['userLanguage'] || navigator['language'] || '' }
+    eaio.track['defaultParams'] = { 'v': 1, 'tid': tid, 'dh': dh, 'cid': 1 * new Date, 'aip': 1, 'ul': navigator['userLanguage'] || navigator['language'] }
     eaio.track['timingSamplingRate'] = .2
     eaio.track['pageview'] = function(url, title, params) {
         eaio.track({ 't': 'pageview', 'dl': abbreviate(url, 2048), 'dt': abbreviate(title, 1500) }, params)
