@@ -2,7 +2,7 @@
 
     var eaio = window[name] = window[name] || {}
 
-    function extend() {
+    eaio['extend'] = function() {
         var target = arguments[0], args = [].slice.call(arguments, 1), i, j
         for (i = 0; i < args.length; ++i) {
             if (args[i]) {
@@ -31,8 +31,8 @@
     }
 
     eaio.track = function(params, extra) {
-        if (1 == (navigator['doNotTrack'] || navigator['msDoNotTrack'] || window['doNotTrack'])) return
-        var url = 'https://www.google-analytics.com/collect?' + serialize(extend({}, eaio.track.defaultParams, params, extra))
+        if (1 == navigator['doNotTrack']) return
+        var url = 'https://www.google-analytics.com/collect?' + serialize(eaio.extend({}, eaio.track.defaultParams, params, extra))
         try {
             navigator.sendBeacon(url)
         }
