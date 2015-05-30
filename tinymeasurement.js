@@ -16,9 +16,9 @@
         return target
     }
 
-    function serialize(obj) {
-        var str = []
-        for (var p in obj) {
+    function serialize(obj, str, p) {
+        str = []
+        for (p in obj) {
             if (obj.hasOwnProperty(p) && obj[p] != undefined && obj[p] !== '') {
                 str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]))
             }
@@ -61,12 +61,22 @@
         catch (e) {}
     }
 
+    function trackPerformance(r0, name, label, params) {
+        var timing = eaio.track.timing
+        if (r0.requestStart) {
+            timing(name, 'DNS', (r0.domainLookupEnd - r0.domainLookupStart)+.5|0, label, params)
+            timing(name, 'TCP', ((r0.secureConnectionStart ? r0.secureConnectionStart : r0.connectEnd) - r0.connectStart)+.5|0, label, params)
+            timing(name, 'TTFB', (r0.responseStart - (r0.startTime || r0.navigationStart))+.5|0, label, params)
+        }
+        if (r0.secureConnectionStart) {
+            timing(name, 'SSL', (r0.connectEnd - r0.secureConnectionStart)+.5|0, label, params)
+        }
+    }
+
     /**
      * Performance tracking of loaded resources.
      * 
      * See http://www.stevesouders.com/blog/2014/08/21/resource-timing-practical-tips/ (used with changes to the TCP time calculation).
-     * 
-     * @return if a resource was found
      */
     eaio['trackResourcePerformance'] = function(pattern, name, label, params) {
         try {
@@ -74,20 +84,22 @@
             for (i = 0; i < resourceEntries.length; ++i) {
                 r0 = resourceEntries[i]
                 if (pattern.test(r0.name)) {
-                    if (r0.requestStart) {
-                        timing(name, 'DNS', (r0.domainLookupEnd - r0.domainLookupStart)+.5|0, label, params)
-                        timing(name, 'TCP', ((r0.secureConnectionStart ? r0.secureConnectionStart : r0.connectEnd) - r0.connectStart)+.5|0, label, params)
-                        timing(name, 'TTFB', (r0.responseStart - (r0.startTime || r0.navigationStart))+.5|0, label, params)
-                    }
-                    if (r0.secureConnectionStart) {
-                        timing(name, 'SSL', (r0.connectEnd - r0.secureConnectionStart)+.5|0, label, params)
-                    }
-                    return true
+					trackPerformance(r0, name, label, params)
+                    break
                 }
             }
         }
         catch (e) {}
-        return false
+    }
+    
+    /**
+     * Performance tracking of the page itself.
+     */
+    eaio['trackPagePerformance'] = function(name, label, params) {
+        try {
+            trackPerformance(window.performance.timing, name, label, params)
+        }
+        catch (e) {}
     }
 
 })(window, 'eaio', 'UA-XXXXXXX-XX', location.host)

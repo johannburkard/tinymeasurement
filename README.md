@@ -11,7 +11,7 @@ Useful if you want to ping back some data from your widget into your Google Anal
 * User timing tracking (sampled at 20 %)
 * Survives Google Closure with Advanced Optimizations
 * HTML 5 Resource Timing API tracking based on regular expressions
-* All parameters can be overwritten through a separate object
+* Parameters can be overwritten through a separate object
 * Less than 1 KB post gzip
 
 ## Usage
@@ -66,21 +66,30 @@ catch (e) { /* Browser doesn't support the HTML 5 timing APIs which may happen *
 
 ### HTML 5 Resource Timing tracking
 
+#### Resource performance tracking by regular expression
+
 ```HTML
 <script src="//some-shady-3rd-party-server.com/weird-widget-that-we-dont-trust.js"></script>
 <script>
 eaio.trackResourcePerformance(/3rd-party-server/, 'That damn 3rd party script')
 </script>
 ```
+(This only works if the server delivers the script with a `Timing-Allow-Origin: *` header. Many CDNs do.)
 
-Timing information for the 3rd party widget includes:
+#### Resource performance tracking for the current page
+
+```HTML
+<script>
+eaio.trackPagePerformance('expensive Page')
+</script>
+```
+
+Timing information includes:
 
 * DNS lookup
 * TCP handshake
-* SSL handshake (minus the TCP handshake time, which is different from Souder's code that I stole)
+* SSL handshake (excluding the TCP handshake time, which is different from Souder's code that I stole)
 * TTFB (time to first byte)
-
-(This only works if the script sends a `Timing-Allow-Origin` header. Many CDNs do.)
 
 ### Passing custom parameters
 
