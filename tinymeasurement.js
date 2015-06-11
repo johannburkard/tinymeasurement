@@ -84,7 +84,7 @@
             for (i = 0; i < resourceEntries.length; ++i) {
                 r0 = resourceEntries[i]
                 if (pattern.test(r0.name)) {
-					trackPerformance(r0, name, label, params)
+                    trackPerformance(r0, name, label, params)
                     break
                 }
             }
