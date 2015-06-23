@@ -45,8 +45,8 @@
     eaio.track['pageview'] = function(url, title, params) {
         eaio.track({ 't': 'pageview', 'dl': abbreviate(url, 2048), 'dt': abbreviate(title, 1500) }, params)
     }
-    eaio.track['event'] = function(category, action, label, value, noInteraction, params) {
-        eaio.track({ 't': 'event', 'ec': abbreviate(category, 150), 'ea': abbreviate(action, 500), 'el': abbreviate(label, 500), 'ev': value }, params)
+    eaio.track['event'] = function(category, action, label, value, nonInteraction, params) {
+        eaio.track({ 't': 'event', 'ec': abbreviate(category, 150), 'ea': abbreviate(action, 500), 'el': abbreviate(label, 500), 'ev': value, 'ni': nonInteraction ? 1 : 0 }, params)
     }
     eaio.track['timing'] = function(category, variable, time, label, params) {
         // See https://developers.google.com/analytics/devguides/collection/gajs/gaTrackingTiming
