@@ -89,7 +89,7 @@ Timing information includes:
 
 * DNS lookup
 * TCP handshake
-* SSL handshake (excluding the TCP handshake time, which is different from Souder's code that I stole)
+* SSL handshake (excluding the TCP handshake time, which is different from Souders' code that I stole)
 * TTFB (time to first byte)
 
 ### Passing custom parameters
