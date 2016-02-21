@@ -102,4 +102,4 @@
         catch (e) {}
     }
 
-})(window, 'eaio', 'UA-XXXXXXX-XX', location.host)
+})(window, 'eaio', 'UA-XXXXXXX-XX', location.hostname)
