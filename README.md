@@ -99,3 +99,5 @@ eaio.trackResourcePerformance(/3rd-party-server/, 'Yet another 3rd party script'
 ```
 
 Tracks the resource performance under the `3rd-party-server.com` hostname. Useful if you set up different profiles for various components.
+
+[![Analytics](https://ga-beacon.appspot.com/UA-7427410-89/tinymeasurement/README.md?pixel)](https://github.com/igrigorik/ga-beacon)
