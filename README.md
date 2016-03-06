@@ -1,6 +1,6 @@
 # tinymeasurement
 
-Tiny JavaScript client for the [Google Measurement Protocol](https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters). Originally written for [EAIO](http://eaio.com)'s widget.
+Tiny JavaScript client for the [Google Measurement Protocol](https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters). Originally written for [EAIO](http://eaio.com/?utm_source=github&utm_medium=open-source&utm_campaign=tinymeasurement)'s widget.
 Useful if you want to ping back some data from your widget into your Google Analytics account, without relying on ga.js or analytics.js being present.
 
 ## Features
