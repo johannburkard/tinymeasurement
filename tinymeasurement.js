@@ -56,7 +56,9 @@
     }
     eaio.track['exception'] = function(category, thrown, label, params) {
         try {
-            eaio.track.event(category, thrown.stack ? thrown.stack.replace(/[\r\n]\s+\w+ /g, ' > ').replace(/https?:\/\/[^/]+/g, '...') : thrown, label, null, null, params) 
+            var message = thrown['message'] ? thrown['name'] + ": " + thrown['message'] : /^([^\r\n]+)/.exec(thrown['stackTrace'] || thrown['stack'])[1]
+            var stack = (thrown['stackTrace'] || thrown['stack']).replace(/^[^:]+: [^\r\n]+/, '').replace(/\s\(([^)]+)\)/g, '@$1').replace(/[\r\n](\s*at)?\s+/g, ' > ').replace(/https?:\/\/[^/]+/ig, '...')
+            eaio.track.event(category, message + " " + stack, label, null, null, params) 
         }
         catch (e) {}
     }
