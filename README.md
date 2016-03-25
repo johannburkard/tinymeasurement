@@ -53,10 +53,10 @@ Arguments: Event category, event action, event label, event value (optional), no
 
 ```JavaScript
 try {
- pickedUpTheTelephoneThenDialedTheSevenDigits()
+    pickedUpTheTelephoneThenDialedTheSevenDigits()
 }
 catch (e) {
- eaio.track.exception('yo', e, "it's marquis baby")
+    eaio.track.exception('yo', e, "it's marquis baby")
 }
 ```
 
@@ -71,7 +71,8 @@ Some stack trace mangling is done in order to transport as much information as p
 </footer>
 <script>
 try {
- eaio.track.timing('performance', 'time to footer', 1 * new Date() - window.performance.timing.domInteractive)
+    eaio.track.timing('performance', 'time to footer',
+        1 * new Date() - window.performance.timing.domInteractive)
 }
 catch (e) { /* Browser doesn't support the HTML 5 timing APIs which may happen */ }
 </script>
@@ -122,7 +123,8 @@ Arguments: Name, label (optional), parameters(optional)
 ### Parameters
 
 ```JavaScript
-eaio.track.resourcePerformance(/3rd-party-server/, 'Yet another 3rd party script', null, { 'dh': '3rd-party-server.com' })
+eaio.track.resourcePerformance(/3rd-party-server/, 'Yet another 3rd party script', null,
+    { 'dh': '3rd-party-server.com' })
 ```
 
 Tracks the resource performance under the `3rd-party-server.com` host name. Useful if you set up different views.
